@@ -11,11 +11,12 @@ const isValidObjectId = function (objectId) {
 
 const authentication = function (req, res, next) {
     try {
-        let token = req.header('Authorization').split(' ')[1]
+        let token = req.header('Authorization')
         if (!token) {
-            res.status(401).send({ status: false, msg: " token is required" })
+           return res.status(401).send({ status: false, msg: " token is required" })
         }
-        let decodedToken = jwt.verify(token,"RoomNo-14" ,{ ignoreExpiration: true })
+        let newToken = token.split(' ')[1]
+        let decodedToken = jwt.verify(newToken,"RoomNo-14" ,{ ignoreExpiration: true })
         if (!decodedToken) {
             return res.status(401).send({ status: false, msg: "token is invalid" })
         }
@@ -38,7 +39,7 @@ let authorization = async function (req, res, next) {
         let userId = req.params.userId
 
         if (!isValidObjectId(userId)) {
-            res.status(400).send({ status: false, msg: " bookId is not a valid ObjectId" })
+           return res.status(400).send({ status: false, msg: " userId is not a valid ObjectId" })
         }
         let token = req.header("Authorization").split(' ')[1]
         let decodedToken = jwt.verify(token, "RoomNo-14")
